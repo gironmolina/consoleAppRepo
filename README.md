@@ -1,4 +1,4 @@
-# Windows Consoles Projects
+# Windows Console Projects
 
 Bundle of Test Projects using Windows Consoles Applications.
 
