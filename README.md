@@ -1,6 +1,6 @@
 # Windows Console Projects
 
-Bundle of Test Projects using Windows Consoles Applications.
+Bundle of Test Projects using Windows Console Applications.
 
 ## List of Projects
 
