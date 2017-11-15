@@ -7,6 +7,8 @@ namespace TestGrill
 {
     class Program
     {
+        public new static int[,] GrillArray = new int[19, 29];
+
         static void Main(string[] args)
         {
             var serviceUri = new Uri("http://grillassessmentservice.cloudapp.net/GrillMenuService.svc");
@@ -17,50 +19,77 @@ namespace TestGrill
                 Credentials = cache
             };
 
-            var grillArray = new int[19, 29];
-            //var menus = new List<Menu>();
-
-            //foreach (var grillMenu in service.GrillMenus.Expand(g => g.GrillMenuItemQuantity))
-            //{
-            //    var goods = new List<Goods>();
-
-            //    foreach (var grillMenuItemQuantity in grillMenu.GrillMenuItemQuantity)
-            //    {
-
-            //        service.LoadProperty(grillMenuItemQuantity, "GrillMenuItem");
-            //        goods.Add(new Goods
-            //        {
-            //            Quantity = grillMenuItemQuantity.Quantity,
-            //            Name = grillMenuItemQuantity.GrillMenuItem.Name,
-            //            Width = grillMenuItemQuantity.GrillMenuItem.Width,
-            //            Length = grillMenuItemQuantity.GrillMenuItem.Length
-            //        });
-            //    }
-
-            //    menus.Add(new Menu { Goods = goods });
-            //}
-
-            for (int i = 0; i < 10; i++)
+            var menus = new List<Menu>();
+            foreach (var grillMenu in service.GrillMenus.Expand(g => g.GrillMenuItemQuantity))
             {
-                for (int j = 0; j < 10; j++)
+                var goods = new List<Goods>();
+
+                foreach (var grillMenuItemQuantity in grillMenu.GrillMenuItemQuantity)
                 {
-                    grillArray[i, j] = 1;
+
+                    service.LoadProperty(grillMenuItemQuantity, "GrillMenuItem");
+                    goods.Add(new Goods
+                    {
+                        Quantity = grillMenuItemQuantity.Quantity,
+                        Name = grillMenuItemQuantity.GrillMenuItem.Name,
+                        Width = grillMenuItemQuantity.GrillMenuItem.Width,
+                        Length = grillMenuItemQuantity.GrillMenuItem.Length
+                    });
                 }
+
+                menus.Add(new Menu { Goods = goods });
+                break;
             }
 
-            for (int i = 0; i < grillArray.GetLength(0); i++)
+            // Evaluate space
+            var isAvalaible = IsAvalaible(menus[0].Goods);
+
+            // Paint
+            PutOnGrill();
+
+            ShowGrill();
+
+            Console.ReadLine();
+        }
+
+        private static bool IsAvalaible(List<Goods> goods)
+        {
+            for (var i = 0; i < 10; i++)
             {
-                for (int j = 0; j < grillArray.GetLength(1); j++)
+                for (var j = 0; j < 10; j++)
                 {
-                    var s = grillArray[i, j];
+                    if (GrillArray[i, j] == 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private static void PutOnGrill()
+        {
+            for (var i = 0; i < 10; i++)
+            {
+                for (var j = 0; j < 10; j++)
+                {
+                    GrillArray[i, j] = 1;
+                }
+            }
+        }
+
+        private static void ShowGrill()
+        {
+            for (int i = 0; i < GrillArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < GrillArray.GetLength(1); j++)
+                {
+                    var s = GrillArray[i, j];
                     Console.Write(s);
                 }
                 Console.WriteLine();
             }
-
-
-
-            Console.ReadLine();
         }
     }
 }
+
