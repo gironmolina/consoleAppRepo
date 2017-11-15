@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="6c967111-27a2-4a3e-bf31-6d90ee8b2c8f" xmlns="urn:schemas-microsoft-com:xml-dataservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d02475f3-a8ff-42fb-87f8-8799be94b41e" xmlns="urn:schemas-microsoft-com:xml-dataservicemap">
   <MetadataSources>
     <MetadataSource Address="http://grillassessmentservice.cloudapp.net/GrillMenuService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.edmx" MetadataType="Edmx" ID="da3657fc-460b-46e1-9ee3-e32685ec3da9" SourceId="1" SourceUrl="http://grillassessmentservice.cloudapp.net/GrillMenuService.svc" />
+    <MetadataFile FileName="service.edmx" MetadataType="Edmx" ID="4de67c50-5250-477a-b2a6-b9ded890a7b1" SourceId="1" SourceUrl="http://grillassessmentservice.cloudapp.net/GrillMenuService.svc" />
   </Metadata>
   <Extensions />
   <Parameters>

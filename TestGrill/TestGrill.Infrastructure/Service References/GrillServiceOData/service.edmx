@@ -1,0 +1,54 @@
+﻿<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <edmx:DataServices m:DataServiceVersion="1.0" m:MaxDataServiceVersion="3.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+    <Schema Namespace="ISolutions.Assessment.Grill.Core" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <EntityType Name="GrillMenu">
+        <Key>
+          <PropertyRef Name="Id" />
+        </Key>
+        <Property Name="Id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" />
+        <NavigationProperty Name="GrillMenuItemQuantity" Relationship="ISolutions.Assessment.Grill.Core.GrillMenu_GrillMenuItemQuantity_GrillMenuItemQuantity_Menu" ToRole="GrillMenuItemQuantity_Menu" FromRole="GrillMenu_GrillMenuItemQuantity" />
+      </EntityType>
+      <EntityType Name="GrillMenuItemQuantity">
+        <Key>
+          <PropertyRef Name="Id" />
+        </Key>
+        <Property Name="Id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="Quantity" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="Menu" Relationship="ISolutions.Assessment.Grill.Core.GrillMenu_GrillMenuItemQuantity_GrillMenuItemQuantity_Menu" ToRole="GrillMenu_GrillMenuItemQuantity" FromRole="GrillMenuItemQuantity_Menu" />
+        <NavigationProperty Name="GrillMenuItem" Relationship="ISolutions.Assessment.Grill.Core.GrillMenuItemQuantity_GrillMenuItem" ToRole="GrillMenuItem" FromRole="GrillMenuItemQuantity" />
+      </EntityType>
+      <EntityType Name="GrillMenuItem">
+        <Key>
+          <PropertyRef Name="Id" />
+        </Key>
+        <Property Name="Id" Type="Edm.Guid" Nullable="false" />
+        <Property Name="Name" Type="Edm.String" />
+        <Property Name="Length" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Width" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Duration" Type="Edm.Time" Nullable="false" />
+      </EntityType>
+      <Association Name="GrillMenu_GrillMenuItemQuantity_GrillMenuItemQuantity_Menu">
+        <End Type="ISolutions.Assessment.Grill.Core.GrillMenuItemQuantity" Role="GrillMenuItemQuantity_Menu" Multiplicity="*" />
+        <End Type="ISolutions.Assessment.Grill.Core.GrillMenu" Role="GrillMenu_GrillMenuItemQuantity" Multiplicity="0..1" />
+      </Association>
+      <Association Name="GrillMenuItemQuantity_GrillMenuItem">
+        <End Type="ISolutions.Assessment.Grill.Core.GrillMenuItemQuantity" Role="GrillMenuItemQuantity" Multiplicity="*" />
+        <End Type="ISolutions.Assessment.Grill.Core.GrillMenuItem" Role="GrillMenuItem" Multiplicity="0..1" />
+      </Association>
+      <EntityContainer Name="GrillMenuContext" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="GrillMenus" EntityType="ISolutions.Assessment.Grill.Core.GrillMenu" />
+        <EntitySet Name="GrillMenuItemQuantities" EntityType="ISolutions.Assessment.Grill.Core.GrillMenuItemQuantity" />
+        <EntitySet Name="GrillMenuItems" EntityType="ISolutions.Assessment.Grill.Core.GrillMenuItem" />
+        <AssociationSet Name="GrillMenuItemQuantity_Menu" Association="ISolutions.Assessment.Grill.Core.GrillMenu_GrillMenuItemQuantity_GrillMenuItemQuantity_Menu">
+          <End Role="GrillMenu_GrillMenuItemQuantity" EntitySet="GrillMenus" />
+          <End Role="GrillMenuItemQuantity_Menu" EntitySet="GrillMenuItemQuantities" />
+        </AssociationSet>
+        <AssociationSet Name="GrillMenuItemQuantity_GrillMenuItem" Association="ISolutions.Assessment.Grill.Core.GrillMenuItemQuantity_GrillMenuItem">
+          <End Role="GrillMenuItemQuantity" EntitySet="GrillMenuItemQuantities" />
+          <End Role="GrillMenuItem" EntitySet="GrillMenuItems" />
+        </AssociationSet>
+      </EntityContainer>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

@@ -9,8 +9,8 @@
 //------------------------------------------------------------------------------
 
 // Original file name:
-// Generation date: 11/14/2017 11:16:58 PM
-namespace TestGrill.GrillServiceOData
+// Generation date: 11/15/2017 10:07:43 PM
+namespace TestGrill.Infrastructure.GrillServiceOData
 {
     
     /// <summary>
@@ -39,7 +39,7 @@ namespace TestGrill.GrillServiceOData
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Services.Design", "1.0.0")]
         protected global::System.Type ResolveTypeFromName(string typeName)
         {
-            global::System.Type resolvedType = this.DefaultResolveType(typeName, "ISolutions.Assessment.Grill.Core", "TestGrill.GrillServiceOData");
+            global::System.Type resolvedType = this.DefaultResolveType(typeName, "ISolutions.Assessment.Grill.Core", "TestGrill.Infrastructure.GrillServiceOData");
             if ((resolvedType != null))
             {
                 return resolvedType;
@@ -54,7 +54,7 @@ namespace TestGrill.GrillServiceOData
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Services.Design", "1.0.0")]
         protected string ResolveNameFromType(global::System.Type clientType)
         {
-            if (clientType.Namespace.Equals("TestGrill.GrillServiceOData", global::System.StringComparison.Ordinal))
+            if (clientType.Namespace.Equals("TestGrill.Infrastructure.GrillServiceOData", global::System.StringComparison.Ordinal))
             {
                 return string.Concat("ISolutions.Assessment.Grill.Core.", clientType.Name);
             }
@@ -153,7 +153,7 @@ namespace TestGrill.GrillServiceOData
                 "uItemQuantity\" /></EntityType><EntityType Name=\"GrillMenuItemQuantity\"><Key><Pro" +
                 "pertyRef Name=\"Id\" /></Key><Property Name=\"Id\" Type=\"Edm.Guid\" Nullable=\"false\" " +
                 "/><Property Name=\"Quantity\" Type=\"Edm.Int32\" Nullable=\"false\" /><NavigationPrope" +
-                "rty Name=\"Goods\" Relationship=\"ISolutions.Assessment.Grill.Core.GrillMenu_GrillMe" +
+                "rty Name=\"Menu\" Relationship=\"ISolutions.Assessment.Grill.Core.GrillMenu_GrillMe" +
                 "nuItemQuantity_GrillMenuItemQuantity_Menu\" ToRole=\"GrillMenu_GrillMenuItemQuanti" +
                 "ty\" FromRole=\"GrillMenuItemQuantity_Menu\" /><NavigationProperty Name=\"GrillMenuI" +
                 "tem\" Relationship=\"ISolutions.Assessment.Grill.Core.GrillMenuItemQuantity_GrillM" +
@@ -377,7 +377,7 @@ namespace TestGrill.GrillServiceOData
         partial void OnQuantityChanging(int value);
         partial void OnQuantityChanged();
         /// <summary>
-        /// There are no comments for Goods in the schema.
+        /// There are no comments for Menu in the schema.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Services.Design", "1.0.0")]
         public GrillMenu Menu
@@ -389,7 +389,7 @@ namespace TestGrill.GrillServiceOData
             set
             {
                 this._Menu = value;
-                this.OnPropertyChanged("Goods");
+                this.OnPropertyChanged("Menu");
             }
         }
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Services.Design", "1.0.0")]

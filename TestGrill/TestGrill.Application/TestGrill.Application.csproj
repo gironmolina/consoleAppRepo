@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5D002415-51E2-4F79-9364-8A4FCD25FA2C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{021D03E3-65A9-4167-A4BC-68E185983C0D}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestGrill</RootNamespace>
-    <AssemblyName>TestGrill</AssemblyName>
+    <RootNamespace>TestGrill.Application</RootNamespace>
+    <AssemblyName>TestGrill.Application</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -50,10 +47,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Spatial, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.6.4\lib\net40\System.Spatial.dll</HintPath>
       <Private>True</Private>
@@ -94,18 +88,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Interfaces\IProgramStarter.cs" />
+    <Compile Include="ProgramStarter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnityConfig.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TestGrill.Application\TestGrill.Application.csproj">
-      <Project>{021D03E3-65A9-4167-A4BC-68E185983C0D}</Project>
-      <Name>TestGrill.Application</Name>
+    <ProjectReference Include="..\TestGrill.Entities\TestGrill.Entities.csproj">
+      <Project>{C1F6ABFB-3A29-4139-8D58-C4F5EB9BDDDE}</Project>
+      <Name>TestGrill.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestGrill.Infrastructure\TestGrill.Infrastructure.csproj">
       <Project>{5C017179-2902-4051-835E-9E8D06299984}</Project>
