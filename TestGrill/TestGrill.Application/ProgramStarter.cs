@@ -56,8 +56,7 @@ namespace TestGrill.Application
             foreach (var menu in menuList)
             {
                 var orderedGoods = menu.Goods
-                    .OrderBy(i => i.Length)
-                    .ThenBy(i => i.Width);
+                    .OrderByDescending(i => i.Length);
 
                 foreach (var good in orderedGoods)
                 {
@@ -99,7 +98,7 @@ namespace TestGrill.Application
             for (var y = 0; y < GrillArray.GetLength(1); y++)
             {
                 // busco primer Y igual a 0
-                if (GrillArray[y, 0] == 0)
+                if (GrillArray[posX, y] == 0)
                 {
                     // comparo que la altura del item sea menor al max altura disponible
                     if (y + length > GrillArray.GetLength(0))
@@ -117,27 +116,30 @@ namespace TestGrill.Application
 
         private void PutOnGrill(Position spot, int goodWidth, int goodLength)
         {
-
-            for (var y = spot.PositionY; y < goodLength; y++)
+            for (var x = 0; x < goodWidth; x++)
             {
-                for (var x = spot.PositionX; x < goodWidth; x++)
+                for (var y = 0; y < goodLength; y++)
                 {
-                    GrillArray[y, x] = 1;
+                    GrillArray[spot.PositionX + x, spot.PositionY + y] = 1;
                 }
             }
         }
 
         private void ShowGrill()
         {
-            for (var i = 0; i < GrillArray.GetLength(0); i++)
+            for (int j = 0; j < GrillArray.GetLength(1); j++)
             {
-                for (var j = 0; j < GrillArray.GetLength(1); j++)
+                for (int i = 0; i < GrillArray.GetLength(0); i++)
                 {
                     var s = GrillArray[i, j];
                     Console.Write(s);
                 }
+
                 Console.WriteLine();
             }
+
+            Console.WriteLine();
+            Console.WriteLine();
         }
     }
 }
