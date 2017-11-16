@@ -10,16 +10,17 @@ namespace TestGrill.Application
 {
     public class ProgramStarter : IProgramStarter
     {
-        private int[,] GrillArray = new int[19, 29];
+        //private int[,] GrillArray = new int[19, 29];
+        private int[,] GrillArray = new int[6, 10];
 
         [Dependency]
         public IODataClient ODataClient { get; set; }
 
         public void StartGrill()
         {
-            var menuList = GetMenu();
+            var menuList = this.GetMenu();
 
-            Cook(menuList);
+            this.Cook(menuList);
 
             Console.ReadLine();
         }
@@ -27,12 +28,12 @@ namespace TestGrill.Application
         private List<Menu> GetMenu()
         {
             var menuList = new List<Menu>();
-            foreach (var grillMenu in ODataClient.Service.GrillMenus.Expand(g => g.GrillMenuItemQuantity))
+            foreach (var grillMenu in this.ODataClient.Service.GrillMenus.Expand(g => g.GrillMenuItemQuantity))
             {
                 var goods = new List<Goods>();
                 foreach (var grillMenuItemQuantity in grillMenu.GrillMenuItemQuantity)
                 {
-                    ODataClient.Service.LoadProperty(grillMenuItemQuantity, "GrillMenuItem");
+                    this.ODataClient.Service.LoadProperty(grillMenuItemQuantity, "GrillMenuItem");
                     goods.Add(new Goods
                     {
                         Quantity = grillMenuItemQuantity.Quantity,
@@ -63,47 +64,55 @@ namespace TestGrill.Application
                     var goodWidth = good.Width;
                     var goodLength = good.Length;
 
-                    var spot = FindFreeSpot(goodWidth, goodLength);
+                    var spot = this.FindFreeSpot(goodWidth, goodLength);
+                    
+                    this.PutOnGrill(spot, goodWidth, goodLength);
 
-                    PutOnGrill(spot, goodWidth, goodLength);
-
-                    ShowGrill();
+                    this.ShowGrill();
                 }
             }
         }
 
         private Position FindFreeSpot(int width, int length)
         {
+            var rounds = 0;
             var posX = 0;
-            var posY = 0;
-
+            int posY = 0;
+            
             // empiezo en X = 0
-            for (var x = 0; x < GrillArray.GetLength(0); x++)
+            for (var x = 0; x < this.GrillArray.GetLength(0); x++)
             {
                 // busco primer X igual a 0
-                if (GrillArray[x, 0] == 0)
+                if (this.GrillArray[x, 0] == 0)
                 {
                     // comparo que el ancho del item sea menor al max ancho disponible
-                    if (x + width > GrillArray.GetLength(0))
+                    if (x + width > this.GrillArray.GetLength(0))
                     {
                         // TODO
+                        posX = 0;
+                        break;
                     }
-                    // tengo X
-                    posX = x;
-                    break;
+                    else
+                    {
+                        // tengo X
+                        posX = x;
+                        break;
+                    }
+                    
                 }
             }
 
             // empiezo en Y = 0
-            for (var y = 0; y < GrillArray.GetLength(1); y++)
+            for (var y = 0; y < this.GrillArray.GetLength(1); y++)
             {
                 // busco primer Y igual a 0
-                if (GrillArray[posX, y] == 0)
+                if (this.GrillArray[posX, y] == 0)
                 {
                     // comparo que la altura del item sea menor al max altura disponible
-                    if (y + length > GrillArray.GetLength(0))
+                    if (y + length > this.GrillArray.GetLength(0))
                     {
-                        // TODO
+                        rounds++;
+                        break;
                     }
                     // tengo Y
                     posY = y;
@@ -120,18 +129,18 @@ namespace TestGrill.Application
             {
                 for (var y = 0; y < goodLength; y++)
                 {
-                    GrillArray[spot.PositionX + x, spot.PositionY + y] = 1;
+                    this.GrillArray[spot.PositionX + x, spot.PositionY + y] = 1;
                 }
             }
         }
 
         private void ShowGrill()
         {
-            for (int j = 0; j < GrillArray.GetLength(1); j++)
+            for (int j = 0; j < this.GrillArray.GetLength(1); j++)
             {
-                for (int i = 0; i < GrillArray.GetLength(0); i++)
+                for (int i = 0; i < this.GrillArray.GetLength(0); i++)
                 {
-                    var s = GrillArray[i, j];
+                    var s = this.GrillArray[i, j];
                     Console.Write(s);
                 }
 
