@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TestGrill.Application.Interfaces;
+using TestGrill.Entities;
 using TestGrill.Infrastructure;
 using Unity.Attributes;
 
@@ -8,23 +10,29 @@ namespace TestGrill.Application
 {
     public class ProgramStarter : IProgramStarter
     {
-        private new int[,] GrillArray = new int[19, 29];
+        private int[,] GrillArray = new int[19, 29];
 
         [Dependency]
-        public IODataClient oDataClient { get; set; }
+        public IODataClient ODataClient { get; set; }
 
         public void StartGrill()
         {
-            var service = oDataClient.Service;
-            var menus = new List<Menu>();
-            foreach (var grillMenu in service.GrillMenus.Expand(g => g.GrillMenuItemQuantity))
+            var menuList = GetMenu();
+
+            Cook(menuList);
+
+            Console.ReadLine();
+        }
+
+        private List<Menu> GetMenu()
+        {
+            var menuList = new List<Menu>();
+            foreach (var grillMenu in ODataClient.Service.GrillMenus.Expand(g => g.GrillMenuItemQuantity))
             {
                 var goods = new List<Goods>();
-
                 foreach (var grillMenuItemQuantity in grillMenu.GrillMenuItemQuantity)
                 {
-
-                    service.LoadProperty(grillMenuItemQuantity, "GrillMenuItem");
+                    ODataClient.Service.LoadProperty(grillMenuItemQuantity, "GrillMenuItem");
                     goods.Add(new Goods
                     {
                         Quantity = grillMenuItemQuantity.Quantity,
@@ -34,52 +42,96 @@ namespace TestGrill.Application
                     });
                 }
 
-                menus.Add(new Menu { Goods = goods });
+                menuList.Add(new Menu { Goods = goods });
+
+                // TODO Delete this
                 break;
             }
 
-            // Evaluate space
-            var isAvalaible = IsAvalaible(menus[0].Goods);
-
-            // Paint
-            PutOnGrill();
-
-            ShowGrill();
-
-            Console.ReadLine();
+            return menuList;
         }
 
-        private bool IsAvalaible(List<Goods> goods)
+        private void Cook(List<Menu> menuList)
         {
-            for (var i = 0; i < 10; i++)
+            foreach (var menu in menuList)
             {
-                for (var j = 0; j < 10; j++)
+                var orderedGoods = menu.Goods
+                    .OrderBy(i => i.Length)
+                    .ThenBy(i => i.Width);
+
+                foreach (var good in orderedGoods)
                 {
-                    if (GrillArray[i, j] == 1)
-                    {
-                        return false;
-                    }
+                    var goodWidth = good.Width;
+                    var goodLength = good.Length;
+
+                    var spot = FindFreeSpot(goodWidth, goodLength);
+
+                    PutOnGrill(spot, goodWidth, goodLength);
+
+                    ShowGrill();
                 }
             }
-            return true;
         }
 
-        private void PutOnGrill()
+        private Position FindFreeSpot(int width, int length)
         {
-            for (var i = 0; i < 10; i++)
+            var posX = 0;
+            var posY = 0;
+
+            // empiezo en X = 0
+            for (var x = 0; x < GrillArray.GetLength(0); x++)
             {
-                for (var j = 0; j < 10; j++)
+                // busco primer X igual a 0
+                if (GrillArray[x, 0] == 0)
                 {
-                    GrillArray[i, j] = 1;
+                    // comparo que el ancho del item sea menor al max ancho disponible
+                    if (x + width > GrillArray.GetLength(0))
+                    {
+                        // TODO
+                    }
+                    // tengo X
+                    posX = x;
+                    break;
+                }
+            }
+
+            // empiezo en Y = 0
+            for (var y = 0; y < GrillArray.GetLength(1); y++)
+            {
+                // busco primer Y igual a 0
+                if (GrillArray[y, 0] == 0)
+                {
+                    // comparo que la altura del item sea menor al max altura disponible
+                    if (y + length > GrillArray.GetLength(0))
+                    {
+                        // TODO
+                    }
+                    // tengo Y
+                    posY = y;
+                    break;
+                }
+            }
+
+            return new Position { PositionX = posX, PositionY = posY };
+        }
+
+        private void PutOnGrill(Position spot, int goodWidth, int goodLength)
+        {
+
+            for (var y = spot.PositionY; y < goodLength; y++)
+            {
+                for (var x = spot.PositionX; x < goodWidth; x++)
+                {
+                    GrillArray[y, x] = 1;
                 }
             }
         }
 
         private void ShowGrill()
         {
-            for (int i = 0; i < GrillArray.GetLength(0); i++)
+            for (var i = 0; i < GrillArray.GetLength(0); i++)
             {
-                for (int j = 0; j < GrillArray.GetLength(1); j++)
+                for (var j = 0; j < GrillArray.GetLength(1); j++)
                 {
                     var s = GrillArray[i, j];
                     Console.Write(s);

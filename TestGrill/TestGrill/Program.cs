@@ -13,7 +13,6 @@ namespace TestGrill
             container = UnityConfig.LoadContainers;
             var programStarter = container.Resolve<ProgramStarter>();
             programStarter.StartGrill();
-            Console.ReadLine();
         }
     }
 }
