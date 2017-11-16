@@ -109,7 +109,7 @@ namespace TestGrill.Application
                 if (this.GrillArray[posX, y] == 0)
                 {
                     // comparo que la altura del item sea menor al max altura disponible
-                    if (y + length > this.GrillArray.GetLength(0))
+                    if (y + length > this.GrillArray.GetLength(1))
                     {
                         rounds++;
                         break;
