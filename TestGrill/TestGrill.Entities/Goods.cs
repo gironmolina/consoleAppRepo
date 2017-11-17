@@ -1,4 +1,4 @@
-﻿namespace TestGrill
+﻿namespace TestGrill.Entities
 {
     public class Goods
     {

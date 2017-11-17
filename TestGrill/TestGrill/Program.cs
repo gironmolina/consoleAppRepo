@@ -13,6 +13,9 @@ namespace TestGrill
             container = UnityConfig.LoadContainers;
             var programStarter = container.Resolve<ProgramStarter>();
             programStarter.StartGrill();
+            Console.WriteLine();
+            Console.WriteLine("Press a key to Exit");
+            Console.Read();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TestGrill
+namespace TestGrill.Entities
 {
     public class Menu
     {
