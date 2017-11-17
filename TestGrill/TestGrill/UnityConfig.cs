@@ -27,7 +27,7 @@ namespace TestGrill
         public static void RegisterTypes(IUnityContainer container)
         {
             container.RegisterInstance(typeof(IODataClient), new ODataClient(ConfigurationManager.AppSettings["ODataAPIUrl"]));
-            container.RegisterType<IGrill, Grill>(new InjectionConstructor(GrillArray));
+            container.RegisterType<IGrillService, GrillService>(new InjectionConstructor(GrillArray));
         }
     }
 }

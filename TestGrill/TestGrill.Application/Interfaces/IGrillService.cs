@@ -3,7 +3,7 @@ using TestGrill.Entities;
 
 namespace TestGrill.Application.Interfaces
 {
-    public interface IGrill
+    public interface IGrillService
     {
         IEnumerable<Menu> GetMenu();
 

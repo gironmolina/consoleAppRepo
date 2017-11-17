@@ -8,7 +8,7 @@ using Unity.Attributes;
 
 namespace TestGrill.Application.Services
 {
-    public class Grill : IGrill
+    public class GrillService : IGrillService
     {
         private int rounds = 0;
 
@@ -17,7 +17,7 @@ namespace TestGrill.Application.Services
 
         private int[,] GrillArray { get; set; }
 
-        public Grill(int[,] grillArray)
+        public GrillService(int[,] grillArray)
         {
             GrillArray = grillArray;
         }
@@ -42,7 +42,6 @@ namespace TestGrill.Application.Services
                 }
 
                 menuList.Add(new Menu { Goods = goods });
-                //break;
             }
 
             return menuList;
@@ -83,8 +82,6 @@ namespace TestGrill.Application.Services
 
         private int CalculateCookRounds(int width, int length)
         {
-            //var rounds = 1;
-
             while (true)
             {
                 var posX = GetPositionX(width);
@@ -100,8 +97,6 @@ namespace TestGrill.Application.Services
                 var position = new Position { PositionX = posX, PositionY = posY.Value };
 
                 PutOnGrill(position, width, length);
-                // TODO
-                //ShowGrill();
                 break;
             }
 
@@ -144,7 +139,6 @@ namespace TestGrill.Application.Services
 
                 if (y + length > GrillArray.GetLength(1))
                 {
-                    //posY = null;
                     break;
                 }
 

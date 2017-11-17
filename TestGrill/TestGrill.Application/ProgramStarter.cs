@@ -7,7 +7,7 @@ namespace TestGrill.Application
     public class ProgramStarter : IProgramStarter
     {
         [Dependency]
-        public IGrill GrillService { get; set; }
+        public IGrillService GrillService { get; set; }
         
         public void StartGrill()
         {
