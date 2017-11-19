@@ -10,8 +10,6 @@ namespace TestGrill.Application.Services
 {
     public class GrillService : IGrillService
     {
-        private int rounds = 0;
-
         [Dependency]
         public IODataClient ODataClient { get; set; }
 
@@ -22,7 +20,7 @@ namespace TestGrill.Application.Services
             GrillArray = grillArray;
         }
 
-        public IEnumerable<Menu> GetMenu()
+        public IList<Menu> GetMenu()
         {
             Console.WriteLine("Retrieving Menu List");
             var menuList = new List<Menu>();
@@ -47,89 +45,94 @@ namespace TestGrill.Application.Services
             return menuList;
         }
 
-        public void Cook(IEnumerable<Menu> menuList)
+        public void Cook(IList<Menu> menuList)
         {
             Console.WriteLine("Started to cooking");
-            var menuNumber = 1;
-            var msg = string.Empty;
+            var menuNumber = 0;
             foreach (var menu in menuList)
             {
-                rounds = 1;
+                menuNumber++;
                 Array.Clear(GrillArray, 0, GrillArray.Length);
 
-                var orderedGoods = menu.Goods
-                    .OrderByDescending(i => i.Length);
+                var orderedGoods = menu.Goods.OrderByDescending(i => i.Length).ToList();
 
-                foreach (var good in orderedGoods)
+                int rounds;
+                var result = TryGetGrillRounds(orderedGoods, out rounds);
+                Console.WriteLine(result
+                    ? $"Menu {menuNumber:D2} is not possible to cook"
+                    : $"Menu {menuNumber:D2}: {rounds} rounds");
+            }
+        }
+
+        private bool TryGetGrillRounds(IList<Goods> goods, out int rounds)
+        {
+            rounds = 1;
+            foreach (var good in goods)
+            {
+                var goodWidth = good.Width;
+                var goodLength = good.Length;
+
+                if (goodWidth > GrillArray.GetLength(0) || 
+                    goodLength > GrillArray.GetLength(1))
                 {
-                    var goodWidth = good.Width;
-                    var goodLength = good.Length;
+                    return false;
+                }
 
-                    if (goodWidth > GrillArray.GetLength(0) || goodLength > GrillArray.GetLength(1))
+                rounds += CalculateRounds(goodWidth, goodLength);
+            }
+
+            return false;
+        }
+
+        private int CalculateRounds(int width, int length)
+        {
+            int posX;
+            int posY;
+            var xFound = TryGetPositionX(width, out posX);
+            var yFound = TryGetPositionY(length, posX, out posY);
+            
+            if (xFound == false && yFound == false)
+            {
+                Array.Clear(GrillArray, 0, GrillArray.Length);
+                return 1;
+            }
+
+            var position = new Position { PositionX = posX, PositionY = posY };
+
+            PutOnGrill(position, width, length);
+            ShowGrill();
+            return 0;
+        }
+
+        private bool TryGetPositionX(int width, out int posX)
+        {
+            for (var j = 0; j < GrillArray.GetLength(1); j++)
+            {
+                for (var i = 0; i < GrillArray.GetLength(0); i++)
+                {
+                    if (GrillArray[i, j] != 0)
                     {
-                        msg = $"Menu {menuNumber:D2} is not possible to Cook.";
-                        break;
+                        continue;
                     }
 
-                    CalculateCookRounds(goodWidth, goodLength);
-                    msg = $"Menu {menuNumber:D2}: {rounds} rounds";
+                    if (i + width > GrillArray.GetLength(0))
+                    {
+                        i = 0;
+                        j++;
+                        continue;
+                    }
+
+                    posX = i;
+                    return true;
                 }
-
-                Console.WriteLine(msg);
-                menuNumber++;
-            }
-        }
-
-        private int CalculateCookRounds(int width, int length)
-        {
-            while (true)
-            {
-                var posX = GetPositionX(width);
-                var posY = GetPositionY(length, posX);
-
-                if (posY == null)
-                {
-                    Array.Clear(GrillArray, 0, GrillArray.Length);
-                    rounds++;
-                    continue;
-                }
-
-                var position = new Position { PositionX = posX, PositionY = posY.Value };
-
-                PutOnGrill(position, width, length);
-                break;
             }
 
-            return rounds;
+            posX = 0;
+            return false;
         }
 
-        private int GetPositionX(int width)
+        private bool TryGetPositionY(int length, int posX, out int posY)
         {
-            var posX = 0;
-
-            for (var x = 0; x < GrillArray.GetLength(0); x++)
-            {
-                if (GrillArray[x, 0] != 0)
-                {
-                    continue;
-                }
-
-                if (x + width > GrillArray.GetLength(0))
-                {
-                    posX = 0;
-                    break;
-                }
-
-                posX = x;
-                break;
-            }
-
-            return posX;
-        }
-
-        private int? GetPositionY(int length, int posX)
-        {
-            int? posY = null;
             for (var y = 0; y < GrillArray.GetLength(1); y++)
             {
                 if (GrillArray[posX, y] != 0)
@@ -143,11 +146,13 @@ namespace TestGrill.Application.Services
                 }
 
                 posY = y;
-                break;
+                return true;
             }
 
-            return posY;
+            posY = 0;
+            return false;
         }
+    
         
         private void PutOnGrill(Position spot, int goodWidth, int goodLength)
         {

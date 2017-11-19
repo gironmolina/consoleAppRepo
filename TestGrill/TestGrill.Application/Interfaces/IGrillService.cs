@@ -5,8 +5,8 @@ namespace TestGrill.Application.Interfaces
 {
     public interface IGrillService
     {
-        IEnumerable<Menu> GetMenu();
+        IList<Menu> GetMenu();
 
-        void Cook(IEnumerable<Menu> menuList);
+        void Cook(IList<Menu> menuList);
     }
 }

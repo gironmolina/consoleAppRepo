@@ -1,5 +1,4 @@
-﻿using System;
-using TestGrill.Application.Interfaces;
+﻿using TestGrill.Application.Interfaces;
 using Unity.Attributes;
 
 namespace TestGrill.Application
