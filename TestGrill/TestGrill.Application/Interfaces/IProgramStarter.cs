@@ -2,6 +2,6 @@
 {
     public interface IProgramStarter
     {
-        void StartGrill();
+        void Run();
     }
 }

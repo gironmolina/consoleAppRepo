@@ -1,7 +1,10 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
+using TestGrill.Application.Interfaces;
+using TestGrill.Application.Services;
 using TestGrill.Infrastructure;
 using Unity;
+using Unity.Injection;
 
 namespace TestGrill.UnitTest
 {
@@ -19,6 +22,7 @@ namespace TestGrill.UnitTest
         public static void ResetExternalDependencies()
         {
             Container.RegisterInstance(typeof(IODataClient), MockRepository.GenerateMock<IODataClient>());
+            Container.RegisterType<IGrillService, GrillService>(new InjectionProperty("GrillArray", new int[50, 30]));
         }
 
         /// <summary>

@@ -4,14 +4,11 @@ using System.Configuration;
 using TestGrill.Application.Interfaces;
 using TestGrill.Application.Services;
 using TestGrill.Infrastructure;
-using Unity.Injection;
 
 namespace TestGrill
 {
     public static class UnityConfig
     {
-        private static readonly int[,] GrillArray = new int[20, 30];
-
         private static readonly Lazy<IUnityContainer> UnityContainer = new Lazy<IUnityContainer>(() =>
         {
             var container = new UnityContainer();
@@ -27,7 +24,7 @@ namespace TestGrill
         public static void RegisterTypes(IUnityContainer container)
         {
             container.RegisterInstance(typeof(IODataClient), new ODataClient(ConfigurationManager.AppSettings["ODataAPIUrl"]));
-            container.RegisterType<IGrillService, GrillService>(new InjectionConstructor(GrillArray));
+            container.RegisterType<IGrillService, GrillService>();
         }
     }
 }

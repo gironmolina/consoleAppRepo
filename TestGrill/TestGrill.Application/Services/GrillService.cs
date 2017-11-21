@@ -4,32 +4,30 @@ using System.Linq;
 using TestGrill.Application.Interfaces;
 using TestGrill.Entities;
 using TestGrill.Infrastructure;
-using Unity.Attributes;
 
 namespace TestGrill.Application.Services
 {
     public class GrillService : IGrillService
     {
-        [Dependency]
-        public IODataClient ODataClient { get; set; }
+        private IODataClient ODataClient { get; set; }
 
-        private int[,] GrillArray { get; set; }
+        public int[,] GrillArray { get; set; } = new int[20, 30];
 
-        public GrillService(int[,] grillArray)
+        public GrillService(IODataClient oDataClient)
         {
-            GrillArray = grillArray;
+            this.ODataClient = oDataClient;
         }
 
         public IList<Menu> GetMenu()
         {
             Console.WriteLine("Retrieving Menu List");
             var menuList = new List<Menu>();
-            foreach (var grillMenu in ODataClient.Service.GrillMenus.Expand(g => g.GrillMenuItemQuantity))
+            foreach (var grillMenu in this.ODataClient.Service.GrillMenus.Expand(g => g.GrillMenuItemQuantity))
             {
                 var goods = new List<Goods>();
                 foreach (var grillMenuItemQuantity in grillMenu.GrillMenuItemQuantity)
                 {
-                    ODataClient.Service.LoadProperty(grillMenuItemQuantity, "GrillMenuItem");
+                    this.ODataClient.Service.LoadProperty(grillMenuItemQuantity, "GrillMenuItem");
                     goods.Add(new Goods
                     {
                         Quantity = grillMenuItemQuantity.Quantity,
@@ -47,17 +45,17 @@ namespace TestGrill.Application.Services
 
         public void Cook(IList<Menu> menuList)
         {
-            Console.WriteLine("Started to cooking");
+            Console.WriteLine("Starting to cook...");
             var menuNumber = 0;
             foreach (var menu in menuList)
             {
                 menuNumber++;
-                Array.Clear(GrillArray, 0, GrillArray.Length);
+                Array.Clear(this.GrillArray, 0, this.GrillArray.Length);
 
                 var orderedGoods = menu.Goods.OrderByDescending(i => i.Length).ToList();
 
                 int rounds;
-                var result = TryGetGrillRounds(orderedGoods, out rounds);
+                var result = this.TryGetGrillRounds(orderedGoods, out rounds);
                 Console.WriteLine(result
                     ? $"Menu {menuNumber:D2} is not possible to cook"
                     : $"Menu {menuNumber:D2}: {rounds} rounds");
@@ -72,13 +70,13 @@ namespace TestGrill.Application.Services
                 var goodWidth = good.Width;
                 var goodLength = good.Length;
 
-                if (goodWidth > GrillArray.GetLength(0) || 
-                    goodLength > GrillArray.GetLength(1))
+                if (goodWidth > this.GrillArray.GetLength(0) || 
+                    goodLength > this.GrillArray.GetLength(1))
                 {
                     return false;
                 }
 
-                rounds += CalculateRounds(goodWidth, goodLength);
+                rounds += this.CalculateRounds(goodWidth, goodLength);
             }
 
             return false;
@@ -88,34 +86,34 @@ namespace TestGrill.Application.Services
         {
             int posX;
             int posY;
-            var xFound = TryGetPositionX(width, out posX);
-            var yFound = TryGetPositionY(length, posX, out posY);
+            var xFound = this.TryGetPositionX(width, out posX);
+            var yFound = this.TryGetPositionY(length, posX, out posY);
             
             if (xFound == false && yFound == false)
             {
-                Array.Clear(GrillArray, 0, GrillArray.Length);
+                Array.Clear(this.GrillArray, 0, this.GrillArray.Length);
                 return 1;
             }
 
             var position = new Position { PositionX = posX, PositionY = posY };
 
-            PutOnGrill(position, width, length);
-            ShowGrill();
+            this.PutOnGrill(position, width, length);
+            this.ShowGrill();
             return 0;
         }
 
         private bool TryGetPositionX(int width, out int posX)
         {
-            for (var j = 0; j < GrillArray.GetLength(1); j++)
+            for (var j = 0; j < this.GrillArray.GetLength(1); j++)
             {
-                for (var i = 0; i < GrillArray.GetLength(0); i++)
+                for (var i = 0; i < this.GrillArray.GetLength(0); i++)
                 {
-                    if (GrillArray[i, j] != 0)
+                    if (this.GrillArray[i, j] != 0)
                     {
                         continue;
                     }
 
-                    if (i + width > GrillArray.GetLength(0))
+                    if (i + width > this.GrillArray.GetLength(0))
                     {
                         i = 0;
                         j++;
@@ -133,14 +131,14 @@ namespace TestGrill.Application.Services
 
         private bool TryGetPositionY(int length, int posX, out int posY)
         {
-            for (var y = 0; y < GrillArray.GetLength(1); y++)
+            for (var y = 0; y < this.GrillArray.GetLength(1); y++)
             {
-                if (GrillArray[posX, y] != 0)
+                if (this.GrillArray[posX, y] != 0)
                 {
                     continue;
                 }
 
-                if (y + length > GrillArray.GetLength(1))
+                if (y + length > this.GrillArray.GetLength(1))
                 {
                     break;
                 }
@@ -160,18 +158,18 @@ namespace TestGrill.Application.Services
             {
                 for (var y = 0; y < goodLength; y++)
                 {
-                    GrillArray[spot.PositionX + x, spot.PositionY + y] = 1;
+                    this.GrillArray[spot.PositionX + x, spot.PositionY + y] = 1;
                 }
             }
         }
         
         private void ShowGrill()
         {
-            for (var j = 0; j < GrillArray.GetLength(1); j++)
+            for (var j = 0; j < this.GrillArray.GetLength(1); j++)
             {
-                for (var i = 0; i < GrillArray.GetLength(0); i++)
+                for (var i = 0; i < this.GrillArray.GetLength(0); i++)
                 {
-                    var s = GrillArray[i, j];
+                    var s = this.GrillArray[i, j];
                     Console.Write(s);
                 }
 

@@ -1,17 +1,20 @@
 ﻿using TestGrill.Application.Interfaces;
-using Unity.Attributes;
 
 namespace TestGrill.Application
 {
     public class ProgramStarter : IProgramStarter
     {
-        [Dependency]
-        public IGrillService GrillService { get; set; }
-        
-        public void StartGrill()
+        private IGrillService GrillService { get; set; }
+
+        public ProgramStarter(IGrillService grillService)
         {
-            var menuList = GrillService.GetMenu();
-            GrillService.Cook(menuList);
+            this.GrillService = grillService;
+        }
+
+        public void Run()
+        {
+            var menuList = this.GrillService.GetMenu();
+            this.GrillService.Cook(menuList);
         }
     }
 }
