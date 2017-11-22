@@ -120,8 +120,26 @@ namespace TestGrill.Application.Services
                         continue;
                     }
 
-                    posX = i;
-                    return true;
+                    var qqq = i + width;
+                    bool asd = true;
+                    for (var k = i; k < qqq; k++)
+                    {
+                        if (this.GrillArray[k, j] == 1)
+                        {
+                            asd = false;
+                            break;
+                        }
+                        
+                    }
+
+                    if (asd)
+                    {
+                        posX = i;
+                        return true;
+                    }
+                    
+                    
+                    
                 }
             }
 
