@@ -86,6 +86,12 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TestGrill.Entities\TestGrill.Entities.csproj">
+      <Project>{C1F6ABFB-3A29-4139-8D58-C4F5EB9BDDDE}</Project>
+      <Name>TestGrill.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

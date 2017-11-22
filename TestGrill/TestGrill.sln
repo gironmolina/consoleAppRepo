@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{B72EFA9D-B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGrill.UnitTest", "TestGrill.UnitTest\TestGrill.UnitTest.csproj", "{74449810-95F8-4747-BDDD-0C7647B5B166}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGrill.TestUtil", "TestGrill.TestUtil\TestGrill.TestUtil.csproj", "{7BB53155-9157-4663-A780-B8337D3624BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,11 +43,16 @@ Global
 		{74449810-95F8-4747-BDDD-0C7647B5B166}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74449810-95F8-4747-BDDD-0C7647B5B166}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74449810-95F8-4747-BDDD-0C7647B5B166}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BB53155-9157-4663-A780-B8337D3624BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BB53155-9157-4663-A780-B8337D3624BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BB53155-9157-4663-A780-B8337D3624BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BB53155-9157-4663-A780-B8337D3624BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{74449810-95F8-4747-BDDD-0C7647B5B166} = {B72EFA9D-B840-462C-8848-1BA8D9616C3E}
+		{7BB53155-9157-4663-A780-B8337D3624BC} = {B72EFA9D-B840-462C-8848-1BA8D9616C3E}
 	EndGlobalSection
 EndGlobal

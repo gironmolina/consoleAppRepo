@@ -10,7 +10,7 @@ namespace TestGrill.UnitTest
         /// <summary>
         /// The container.
         /// </summary>
-        protected readonly IUnityContainer Container = TestAssemblyInitializer.Container;
+        protected readonly IUnityContainer Container = TestAssemblyInitializer.container;
 
         /// <summary>
         /// The test set up.

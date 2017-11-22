@@ -21,25 +21,7 @@ namespace TestGrill.Application.Services
         public IList<Menu> GetMenu()
         {
             Console.WriteLine("Retrieving Menu List");
-            var menuList = new List<Menu>();
-            foreach (var grillMenu in this.ODataClient.Service.GrillMenus.Expand(g => g.GrillMenuItemQuantity))
-            {
-                var goods = new List<Goods>();
-                foreach (var grillMenuItemQuantity in grillMenu.GrillMenuItemQuantity)
-                {
-                    this.ODataClient.Service.LoadProperty(grillMenuItemQuantity, "GrillMenuItem");
-                    goods.Add(new Goods
-                    {
-                        Quantity = grillMenuItemQuantity.Quantity,
-                        Name = grillMenuItemQuantity.GrillMenuItem.Name,
-                        Width = grillMenuItemQuantity.GrillMenuItem.Width,
-                        Length = grillMenuItemQuantity.GrillMenuItem.Length
-                    });
-                }
-
-                menuList.Add(new Menu { Goods = goods });
-            }
-
+            var menuList = this.ODataClient.GetMenu();
             return menuList;
         }
 
@@ -104,42 +86,45 @@ namespace TestGrill.Application.Services
 
         private bool TryGetPositionX(int width, out int posX)
         {
-            for (var j = 0; j < this.GrillArray.GetLength(1); j++)
+            for (var y = 0; y < this.GrillArray.GetLength(1); y++)
             {
-                for (var i = 0; i < this.GrillArray.GetLength(0); i++)
+                for (var x = 0; x < this.GrillArray.GetLength(0); x++)
                 {
-                    if (this.GrillArray[i, j] != 0)
+                    // Find first X empty position
+                    if (this.GrillArray[x, y] != 0)
                     {
                         continue;
                     }
-
-                    if (i + width > this.GrillArray.GetLength(0))
+                    
+                    // Validate if there is enough space, else go to the next line.
+                    var estimatedWidth = x + width;
+                    if (estimatedWidth > this.GrillArray.GetLength(0))
                     {
-                        i = 0;
-                        j++;
+                        x = 0;
+                        y++;
                         continue;
                     }
 
-                    var qqq = i + width;
-                    bool asd = true;
-                    for (var k = i; k < qqq; k++)
+                    // Validate if the place is available
+                    var placeAvailable = true;
+                    for (var i = x; i < estimatedWidth; i++)
                     {
-                        if (this.GrillArray[k, j] == 1)
+                        if (this.GrillArray[i, y] != 1)
                         {
-                            asd = false;
-                            break;
+                            continue;
                         }
-                        
+
+                        placeAvailable = false;
+                        break;
                     }
 
-                    if (asd)
+                    if (!placeAvailable)
                     {
-                        posX = i;
-                        return true;
+                        continue;
                     }
-                    
-                    
-                    
+
+                    posX = x;
+                    return true;
                 }
             }
 
@@ -151,12 +136,15 @@ namespace TestGrill.Application.Services
         {
             for (var y = 0; y < this.GrillArray.GetLength(1); y++)
             {
+                // Find first Y empty position
                 if (this.GrillArray[posX, y] != 0)
                 {
                     continue;
                 }
 
-                if (y + length > this.GrillArray.GetLength(1))
+                // Validate if there is enough space, else go to the next line.
+                var estimatedLength = y + length;
+                if (estimatedLength > this.GrillArray.GetLength(1))
                 {
                     break;
                 }
