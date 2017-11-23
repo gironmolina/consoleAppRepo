@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using TestGrill.Application.Interfaces;
 using TestGrill.Application.Services;
 using TestGrill.Entities;
-using TestGrill.Infrastructure;
 using TestGrill.TestUtil.Builders;
 using Unity;
 using Unity.Injection;
@@ -22,9 +20,6 @@ namespace TestGrill.UnitTest.Services
         public void Sample_Test()
         {
             // arrange
-            this.Container.RegisterType<IGrillService, GrillService>(new InjectionProperty("GrillArray", new int[50, 30]));
-            var grillService = this.Container.Resolve<IGrillService>();
-
             var menuList = new List<Goods>
             {
                 new GoodsBuilder().Name("Veal").Quantity(10).Width(4).Length(8),
@@ -32,21 +27,19 @@ namespace TestGrill.UnitTest.Services
             };
 
             var menuMock = new List<Menu> { new Menu { Goods = menuList } };
-            grillService.Stub(x => x.GetMenu()).Return(menuMock);
-            var sut = this.CreateGrillService();
+            var sut = CreateGrillService(new int[50, 30]);
 
             // act
             sut.Cook(menuMock);
 
             // assert
-            //Assert.AreEqual(3, clientDto.Count);
             Assert.Inconclusive("Test Sample");
         }
 
-        private GrillService CreateGrillService()
+        private IGrillService CreateGrillService(int[,] grillArray)
         {
-            var sut = new GrillService(this.Container.Resolve<IODataClient>());
-            return sut;
+            this.Container.RegisterType<IGrillService, GrillService>(new InjectionProperty("GrillArray", grillArray));
+            return this.Container.Resolve<IGrillService>();
         }
     }
 }
